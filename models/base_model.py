@@ -6,6 +6,8 @@ Defines a base class.
 from uuid import uuid4
 from datetime import datetime
 
+time_format = "%Y-%m-%dT%H:%M:%S.%f"
+
 
 class BaseModel:
     """
@@ -13,11 +15,21 @@ class BaseModel:
     attributes and methods for other classes.
     """
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        """Initializes a new instance"""
 
-        self.id = str(uuid4())
-        self.created_at = datetime.utcnow()
-        self.updated_at = datetime.utcnow()
+        if not kwargs:
+            self.id = str(uuid4())
+            self.created_at = datetime.utcnow()
+            self.updated_at = datetime.utcnow()
+        else:
+            for key, val in kwargs.items():
+                if key != '__class__':
+                    if key == 'created_at':
+                        val = datetime.strptime(val, time_format)
+                    if key == 'updated_at':
+                        val = datetime.strptime(val, time_format)
+                    setattr(self, key, val)
 
     def save(self):
         """updates the `updated_at` attribute."""

@@ -4,7 +4,8 @@ Unit tests for Base Model
 """
 
 import unittest
-from models.base_model import BaseModel
+from models.base_model import BaseModel, time_format
+from datetime import datetime
 
 
 class TestBaseModel(unittest.TestCase):
@@ -18,6 +19,23 @@ class TestBaseModel(unittest.TestCase):
         self.assertIsNotNone(base_model.id)
         self.assertIsNotNone(base_model.updated_at)
         self.assertIsNotNone(base_model.created_at)
+
+    def test_init_kwargs(self):
+        """Test Initialization with arguments"""
+
+        base_model1 = BaseModel()
+        base_model1.name = "Test model"
+        base_model1.number = 12
+        base_dict = base_model1.to_dict()
+        created_at = datetime.strptime(base_dict['created_at'], time_format)
+        updated_at = datetime.strptime(base_dict['updated_at'], time_format)
+        base_model2 = BaseModel(**base_dict)
+
+        self.assertEqual(base_model2.id, base_dict['id'])
+        self.assertEqual(base_model2.created_at, created_at)
+        self.assertEqual(base_model2.updated_at, updated_at)
+        self.assertEqual(base_model2.number, 12)
+        self.assertEqual(base_model2.name, "Test model")
 
     def test_uniqueid(self):
         """Test for Unique ID"""
