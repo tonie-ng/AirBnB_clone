@@ -5,6 +5,7 @@ Defines a base class.
 
 from uuid import uuid4
 from datetime import datetime
+import models
 
 time_format = "%Y-%m-%dT%H:%M:%S.%f"
 
@@ -22,6 +23,7 @@ class BaseModel:
             self.id = str(uuid4())
             self.created_at = datetime.utcnow()
             self.updated_at = datetime.utcnow()
+            models.storage.new(self)
         else:
             for key, val in kwargs.items():
                 if key != '__class__':
@@ -35,6 +37,7 @@ class BaseModel:
         """updates the `updated_at` attribute."""
 
         self.updated_at = datetime.utcnow()
+        models.storage.save()
 
     def to_dict(self):
         """Returns a dictionary of containing all elements of __dict__"""

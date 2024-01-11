@@ -1,0 +1,51 @@
+#!/usr/bin/python3
+"""
+File Storage class.
+"""
+
+import json
+from models.base_model import BaseModel
+
+classes = {
+    "BaseModel": BaseModel,
+}
+
+
+class FileStorage:
+    """serializes instances to a JSON file and
+    deserializes JSON file to instances:"""
+
+    __file_path = 'file.json'
+    __objects = {}
+
+    def all(self):
+        """returns the dictionary __objects"""
+
+        return self.__objects
+
+    def new(self, obj):
+        """sets in __objects the obj with key <obj class name>.id"""
+
+        name = obj.__class__.__name__
+        id = obj.id
+        self.__objects[name + '.' + id] = obj
+
+    def save(self):
+        """serializes __objects to the JSON file"""
+
+        json_obj = {}
+        for key, value in self.__objects.items():
+            json_obj[key] = self.__objects[key].to_dict()
+        with open(self.__file_path, 'w') as file:
+            json.dump(json_obj, file, indent=2)
+
+    def reload(self):
+        """deserializes the JSON file to __objects"""
+
+        try:
+            with open(self.__file_path, 'r') as file:
+                json_obj = json.load(file)
+                for key, value in json_obj.items():
+                    self.__objects[key] = classes[value["__class__"]](**value)
+        except FileNotFoundError:
+            pass
