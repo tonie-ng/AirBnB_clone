@@ -13,6 +13,7 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 import models
+import shlex
 
 classes = {
     "BaseModel": BaseModel,
@@ -35,7 +36,7 @@ class HBNBCommand(cmd.Cmd):
         save it to a file and print its id.
         """
 
-        args = arg.split()
+        args = shlex.split(arg)
         if len(args) == 0:
             print("** class name missing **")
         elif args[0] not in classes:
@@ -48,7 +49,7 @@ class HBNBCommand(cmd.Cmd):
     def do_show(self, arg):
         """Prints the string representation of an instance."""
 
-        args = arg.split()
+        args = shlex.split(arg)
         if len(args) == 0:
             print("** class name missing **")
         elif args[0] not in classes:
@@ -62,10 +63,33 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** no instance found **")
 
+    def do_update(self, arg):
+        """Updates an instance based on the class name and id."""
+        args = shlex.split(arg)
+        if len(args) == 0:
+            print("** class name missing **")
+        elif args[0] not in classes:
+            print("** class doesn't exist **")
+        else:
+            if len(args) == 1:
+                print("** instance id missing **")
+            else:
+                key = args[0] + '.' + args[1]
+                if key in models.storage.all():
+                    if len(args) == 2:
+                        print("** attribute name missing **")
+                    elif len(args) == 3:
+                        print("** value missing **")
+                    else:
+                        setattr(models.storage.all()[key], args[2], args[3])
+                        models.storage.all()[key].save()
+                else:
+                    print("** no instance found **")
+
     def do_destroy(self, arg):
         """Deletes an instance."""
 
-        args = arg.split()
+        args = shlex.split(arg)
         if len(args) == 0:
             print("** class name missing **")
         elif args[0] not in classes:
@@ -83,7 +107,7 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, arg):
         """Prints all string representation of all instances."""
 
-        args = arg.split()
+        args = shlex.split(arg)
         ins_obj = []
 
         if len(args) > 0 and args[0] not in classes:
