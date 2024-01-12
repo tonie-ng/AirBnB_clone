@@ -31,6 +31,36 @@ class HBNBCommand(cmd.Cmd):
 
     prompt = '(hbnb) '
 
+    def default(self, arg):
+        """
+        Default method of the console.
+        This handles special inputs like User.create()
+        """
+        methods = {
+            "all": self.do_all,
+            "show": self.do_show,
+            "destroy": self.do_destroy,
+            "create": self.do_create,
+            "update": self.do_update,
+            "count": self.count
+        }
+        args = arg.split(".")
+        if len(args) != 2:
+            return False
+        if args[0] not in classes:
+            print("** class doesn't exist **")
+            return False
+        command = args[1].split("(")
+        if len(command) < 2:
+            return False
+        if len(command[1]) == 0:
+            return False
+        if command[1][-1] != ")":
+            return False
+        command[1] = command[1][:-1].split(",")
+        command[1] = "".join(command[1])
+        return methods[command[0]]("{} {}".format(args[0], command[1]))
+
     def do_create(self, arg):
         """Create an instance of the Base model,
         save it to a file and print its id.
@@ -117,6 +147,19 @@ class HBNBCommand(cmd.Cmd):
             if len(args) == 0 or key.startswith(args[0]):
                 ins_obj.append(str(value))
         print(ins_obj)
+
+    def count(self, arg):
+        """retrieves the number of instances of a class"""
+
+        ins_obj = []
+        args = shlex.split(arg)
+        if len(args) < 1 or args[0] not in classes:
+            print("** class doesn't exist **")
+            return False
+        for key, value in models.storage.all().items():
+            if key.startswith(args[0]):
+                ins_obj.append(str(value))
+        print(len(ins_obj))
 
     def emptyline(self):
         """Handles empty line"""
