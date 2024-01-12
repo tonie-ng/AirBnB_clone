@@ -118,6 +118,11 @@ class HBNBCommand(cmd.Cmd):
                 ins_obj.append(str(value))
         print(ins_obj)
 
+    def emptyline(self):
+        """Handles empty line"""
+
+        return False
+
     def do_quit(self, arg):
         """Exit the program."""
 
