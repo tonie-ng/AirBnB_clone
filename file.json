@@ -2,7 +2,14 @@
   "BaseModel.1350fe79-c159-4dd6-b907-d76c702a49d5": {
     "id": "1350fe79-c159-4dd6-b907-d76c702a49d5",
     "created_at": "2024-01-12T09:59:23.950737",
-    "updated_at": "2024-01-12T09:59:23.950746",
+    "updated_at": "2024-01-13T05:25:46.614845",
+    "first_name": "Johnsyyeqh maduagwun",
     "__class__": "BaseModel"
+  },
+  "User.f65237c8-5093-44b6-9814-8c77f9c5de3f": {
+    "id": "f65237c8-5093-44b6-9814-8c77f9c5de3f",
+    "created_at": "2024-01-13T05:21:49.886324",
+    "updated_at": "2024-01-13T05:21:49.886338",
+    "__class__": "User"
   }
 }

@@ -25,6 +25,9 @@ classes = {
     "State": State
 }
 
+integers = ["number_rooms", "number_bathrooms", "max_guest", "price_by_night"]
+floats = ["latitude", "longitude"]
+
 
 class HBNBCommand(cmd.Cmd):
     """HBNB CONSOLE"""
@@ -36,6 +39,7 @@ class HBNBCommand(cmd.Cmd):
         Default method of the console.
         This handles special inputs like User.create()
         """
+
         methods = {
             "all": self.do_all,
             "show": self.do_show,
@@ -95,6 +99,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, arg):
         """Updates an instance based on the class name and id."""
+
         args = shlex.split(arg)
         if len(args) == 0:
             print("** class name missing **")
@@ -111,6 +116,17 @@ class HBNBCommand(cmd.Cmd):
                     elif len(args) == 3:
                         print("** value missing **")
                     else:
+                        if args[0] == "Place":
+                            if args[2] in integers:
+                                try:
+                                    args[3] = int(args[3])
+                                except (ValueError, TypeError):
+                                    args[3] = 0
+                            elif args[2] in floats:
+                                try:
+                                    args[3] = float(args[3])
+                                except (TypeError, ValueError):
+                                    args[3] = 0.0
                         setattr(models.storage.all()[key], args[2], args[3])
                         models.storage.all()[key].save()
                 else:
