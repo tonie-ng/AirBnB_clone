@@ -80,7 +80,3 @@ class TestBaseModel(unittest.TestCase):
         self.assertIn(base_model.id, str(base_model))
         self.assertIn(name, str(base_model))
         self.assertIn(str(base_dict), str(base_model))
-
-
-if __name__ == "__main__":
-    unittest.main()
