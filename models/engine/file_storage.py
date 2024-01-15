@@ -60,4 +60,4 @@ class FileStorage:
                 for key, value in json_obj.items():
                     self.__objects[key] = classes[value["__class__"]](**value)
         except FileNotFoundError:
-            pass
+            return
